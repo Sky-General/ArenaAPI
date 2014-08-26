@@ -77,12 +77,61 @@ public class ArenaAPI {
 		playerState.put(player.getName(), PlayerState.INLOBBY);
 		player.setFlying(false);
 		player.setAllowFlight(false);
-		player.setMaxHealth(1.0);
-		player.setHealth(1.0);
+		player.setMaxHealth(2.0);
+		player.setHealth(2.0);
 		player.teleport(spawn);
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			player.showPlayer(p);
 			p.showPlayer(player);
+		}
+	}
+	
+	public static void checkArena(World arena, Location spawn, boolean hasTeams, String gameName, Player winner){
+		if(hasTeams){
+			prefix = prefix.replaceFirst("NAME", gameName);
+			int redTeamSize = 0;
+			int blueTeamSize = 0;
+			for (int r1 = redTeam.size(); r1 != 0; r1--)
+				if (redTeam.containsValue(arena))
+					redTeamSize = redTeamSize + 1;
+			for (int b1 = blueTeam.size(); b1 != 0; b1--)
+				if (blueTeam.containsValue(arena))
+					blueTeamSize = blueTeamSize + 1;
+			if (!arenaStarted.get(arena.getName()))
+				return;
+			if (redTeamSize == 0) {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.getWorld().equals(arena)) {
+						player.sendMessage(ChatColor.translateAlternateColorCodes(
+								'&', prefix + " The &bblue &8team won!"));
+						arenaStarted.put(arena.getName(), false);
+						resetPlayer(player, spawn);
+						return;
+					}
+				}
+			}
+			if (blueTeamSize == 0) {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.getWorld().equals(arena)) {
+						player.sendMessage(ChatColor.translateAlternateColorCodes(
+								'&', prefix + " The &cred &8team won!"));
+						player.teleport(spawn);
+						arenaStarted.put(arena.getName(), false);
+						resetPlayer(player, spawn);
+						return;
+					}
+				}
+			}
+		
+		}
+		if(!hasTeams){
+			prefix = prefix.replaceFirst("NAME", gameName);
+			for(Player p : arena.getPlayers()){
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + winner.getName() + " has won!"));
+				resetPlayer(p, spawn);
+				arenaStarted.put(arena.getName(), false);
+				p.teleport(spawn);
+			}
 		}
 	}
 
