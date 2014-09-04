@@ -1,5 +1,5 @@
-name: ArenaAPI
+name: CGArenaAPI
 description: PortalKings API for arenas and minigames.
 version: ALPHA
 author: Sky_General109
-main: net.portalkings.api.Main
+main: net.creativegames.api.Main

@@ -1,4 +1,4 @@
-package net.portalkings.api;
+package net.creativegames.api;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +32,7 @@ public class ArenaAPI {
 		arenaSize.put(arena.getName(), size);
 	}
 
-	public static void addPlayerToArena(Player player, World arena,
-			String gameName, Boolean hasTeams) {
+	public static void addPlayerToArena(Player player, World arena, String gameName, Boolean hasTeams) {
 		prefix = prefix.replaceFirst("NAME", gameName);
 		if (!arenaSize.containsKey(arena.getName()))
 			arenaSize.put(arena.getName(), 0);
@@ -42,28 +41,18 @@ public class ArenaAPI {
 					prefix + " &cSorry. That arena is full."));
 			return;
 		} else {
-			if (hasTeams) {
+			if (hasTeams.equals(true)) {
 				size = size.replaceFirst("l", "" + arena.getPlayers().size());
 				if (redTeam.size() > blueTeam.size()) {
 					/* Adding player to the Blue Team. */
 					blueTeam.put(player.getName(), arena);
-					for (Player p : Bukkit.getOnlinePlayers())
-						if (p.getWorld().equals(arena) || p.equals(player))
-							p.sendMessage(ChatColor
-									.translateAlternateColorCodes('&', prefix
-											+ " &1" + player.getName()
-											+ "&b has joined the game! " + size));
+					for (Player p : arena.getPlayers())p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &1" + player.getName() + "&b has joined the game! " + size));
 
 				}
 				if (blueTeam.size() > redTeam.size()) {
-					/* Adding player to the Blue Team. */
+					/* Adding player to the Red Team. */
 					redTeam.put(player.getName(), arena);
-					for (Player p : Bukkit.getOnlinePlayers())
-						if (p.getWorld().equals(arena) || p.equals(player))
-							p.sendMessage(ChatColor
-									.translateAlternateColorCodes('&', prefix
-											+ " &c" + player.getName()
-											+ "&b has joined the game! " + size));
+					for(Player p : arena.getPlayers()) p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &c" + player.getName() + "&b has joined the game! " + size));
 
 				}
 			}
@@ -93,10 +82,10 @@ public class ArenaAPI {
 			int blueTeamSize = 0;
 			for (int r1 = redTeam.size(); r1 != 0; r1--)
 				if (redTeam.containsValue(arena))
-					redTeamSize = redTeamSize + 1;
+					redTeamSize++;
 			for (int b1 = blueTeam.size(); b1 != 0; b1--)
 				if (blueTeam.containsValue(arena))
-					blueTeamSize = blueTeamSize + 1;
+					blueTeamSize++;
 			if (!arenaStarted.get(arena.getName()))
 				return;
 			if (redTeamSize == 0) {

@@ -1,4 +1,4 @@
-package net.portalkings.api;
+package net.creativegames.api;
 
 public enum PlayerState {
 	SPECTATOR("Spectator"), INGAME("Ingame"), INLOBBY("Inlobby");
